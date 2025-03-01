@@ -1,7 +1,9 @@
-import "./App.css";
-
 function App() {
-  return <div>React with Vite</div>;
+  return (
+    <div class="bg-blue-500 text-white text-center p-4">
+      Tailwind is working!
+    </div>
+  );
 }
 
 export default App;
