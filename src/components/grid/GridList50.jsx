@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import TextArea from "../TextArea";
 import { fetchFonts, loadGoogleFont } from "../FontLoading";
 
-const GridFontList50 = () => {
+const GridList50 = () => {
   const [fonts, setFonts] = useState([]);
   const [selectedFont, setSelectedFont] = useState("");
 
+  // fetch fonts
   useEffect(() => {
     const loadFonts = async () => {
       const fontList = await fetchFonts();
@@ -42,4 +43,4 @@ const GridFontList50 = () => {
   );
 };
 
-export default GridFontList50;
+export default GridList50;
