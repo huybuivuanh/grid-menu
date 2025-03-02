@@ -1,11 +1,12 @@
 // Fetch fonts from Google API
-export const fetchFonts = async () => {
+// numOfFonts: number of fonts you want to import
+export const fetchFonts = async (numOfFonts) => {
   try {
     const response = await fetch(
       `https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyC1_xKBz4moDq2xA1J4wd-I_vNXXv7GrRE`
     );
     const data = await response.json();
-    return data.items.slice(0, 49); // Return first 49 fonts
+    return data.items.slice(0, numOfFonts);
   } catch (error) {
     console.error("Error fetching fonts:", error);
     return [];
@@ -13,6 +14,7 @@ export const fetchFonts = async () => {
 };
 
 // Load Google Fonts dynamically
+// fontName: the font that will be loaded
 export const loadGoogleFont = (fontName) => {
   const fontUrl = `https://fonts.googleapis.com/css2?family=${fontName.replace(
     / /g,

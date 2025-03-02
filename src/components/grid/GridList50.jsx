@@ -9,7 +9,7 @@ const GridList50 = () => {
   // fetch fonts
   useEffect(() => {
     const loadFonts = async () => {
-      const fontList = await fetchFonts();
+      const fontList = await fetchFonts(49);
       setFonts(fontList);
     };
 
