@@ -1,4 +1,7 @@
-const TextArea = ({ selectedFont, setText, text }) => {
+import { useState } from "react";
+
+const TextArea = ({ selectedFont }) => {
+  const [text, setText] = useState("");
   return (
     <div className="container mx-auto px-10">
       <textarea

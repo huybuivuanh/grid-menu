@@ -1,31 +1,19 @@
 import { useState, useEffect } from "react";
 import TextArea from "../TextArea";
+import { fetchFonts, loadGoogleFont } from "../FontLoading";
 
 const GridFontList50 = () => {
   const [fonts, setFonts] = useState([]);
   const [selectedFont, setSelectedFont] = useState("");
-  const [text, setText] = useState("");
 
   useEffect(() => {
-    fetch(
-      `https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyC1_xKBz4moDq2xA1J4wd-I_vNXXv7GrRE`
-    )
-      .then((response) => response.json())
-      .then((data) => setFonts(data.items.slice(0, 49))); // Load 49 fonts
-  }, []);
+    const loadFonts = async () => {
+      const fontList = await fetchFonts();
+      setFonts(fontList);
+    };
 
-  const loadGoogleFont = (fontName) => {
-    const fontUrl = `https://fonts.googleapis.com/css2?family=${fontName.replace(
-      / /g,
-      "+"
-    )}&display=swap`;
-    if (!document.querySelector(`link[href="${fontUrl}"]`)) {
-      const link = document.createElement("link");
-      link.href = fontUrl;
-      link.rel = "stylesheet";
-      document.head.appendChild(link);
-    }
-  };
+    loadFonts();
+  }, []);
 
   return (
     <div className="menu-container">
@@ -49,11 +37,7 @@ const GridFontList50 = () => {
           );
         })}
       </div>
-      <TextArea
-        selectedFont={selectedFont}
-        text={text}
-        setText={setText}
-      ></TextArea>
+      <TextArea selectedFont={selectedFont}></TextArea>
     </div>
   );
 };
