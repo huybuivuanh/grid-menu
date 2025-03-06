@@ -6,9 +6,9 @@ const Grid300 = () => {
             Grid 300
         </header>
 
-        <text>
+        <header>
             <GridList300></GridList300>
-        </text>
+        </header>
     </div>
   );
 };
