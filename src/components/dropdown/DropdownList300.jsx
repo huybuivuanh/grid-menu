@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import TextArea from "../TextArea";
 import { fetchFonts, loadGoogleFont } from "../FontLoading";
 
-const DropdownList50 = () => {
+const DropdownList300 = () => {
   const [fonts, setFonts] = useState([]);
   const [selectedFont, setSelectedFont] = useState("");
 
   // Fetch the fonts once on mount
   useEffect(() => {
     const loadFonts = async () => {
-      const fontList = await fetchFonts(49); // Adjust as needed to retrieve 50 fonts
+      const fontList = await fetchFonts(299); // Adjust as needed to retrieve 300 fonts
       setFonts(fontList);
       if (fontList.length > 0) {
         // Optionally select the first font by default
@@ -60,4 +60,4 @@ const DropdownList50 = () => {
   );
 };
 
-export default DropdownList50;
+export default DropdownList300;
