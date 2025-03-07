@@ -19,7 +19,14 @@ export default function GridList300(){
         // create a button which displays a new font option
         return  <button
             id={buttonNum + ""}
-            style={{fontFamily: fonts[buttonNum].family, background: "lightgrey", fontSize: 10, padding: "5px 5px", margin: "5px 5px", width: "15%"}}
+            style={{fontFamily: fonts[buttonNum].family,
+                background: "lightgrey",
+                fontSize: 9,
+                margin: "2px 2px",
+                width: "75px",
+                height: "25px",
+                textWrap: "nowrap"
+            }}
             onClick={ () => clicked(buttonNum)} >
             {fonts[buttonNum].family}
         </button>;
@@ -41,7 +48,7 @@ export default function GridList300(){
         setCurrID(id); // set the selected ID
     }
     return(
-    <div id="d1" align="center">
+    <div id="d1" align="center" >
         {buttonArray}
         <TextBox selectedFont={fonts[currID].family}></TextBox>
     </div>
