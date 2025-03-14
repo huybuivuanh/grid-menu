@@ -9,13 +9,13 @@ const Navbar = () => {
           {[
             { name: "Home", path: "/" },
             { name: "Grid 50", path: "/grid-50" },
+            { name: "Grid 100", path: "/grid-100" },
             { name: "Grid 300", path: "/grid-300" },
             { name: "Grid 500", path: "/grid-500" },
-            { name: "Grid 1000", path: "/grid-1000" },
             { name: "Dropdown 50", path: "/dropdown-50" },
+            { name: "Dropdown 100", path: "/dropdown-100" },
             { name: "Dropdown 300", path: "/dropdown-300" },
             { name: "Dropdown 500", path: "/dropdown-500" },
-            { name: "Dropdown 1000", path: "/dropdown-1000" },
           ].map((item, index) => (
             <li key={item.path} className="border-l border-gray-500">
               <Link

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import TextArea from "../TextArea";
 import { fetchFonts, loadGoogleFont } from "../FontLoading";
 
-const GridList300 = () => {
+const GridList500 = () => {
   const [fonts, setFonts] = useState([]);
   const [selectedFont, setSelectedFont] = useState("");
 
@@ -45,4 +45,4 @@ const GridList300 = () => {
   );
 };
 
-export default GridList300;
+export default GridList500;
