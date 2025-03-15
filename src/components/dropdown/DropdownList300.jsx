@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import TextArea from "../TextArea";
-import { fetchFonts, loadGoogleFont } from "../FontLoading";
+import { fetchFonts, loadGoogleFont } from "../utils/FontLoading";
 
 const DropdownList300 = () => {
   const [fonts, setFonts] = useState([]);

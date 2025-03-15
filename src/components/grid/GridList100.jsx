@@ -1,46 +1,55 @@
 import { useState, useEffect } from "react";
 import TextArea from "../TextArea";
-import { fetchFonts, loadGoogleFont } from "../FontLoading";
+import { fetchFonts, loadGoogleFont } from "../utils/FontLoading";
+import { useFontSizes, trimFont } from "../utils/FontProcessing";
+import FontMeasure from "../utils/FontMeasure";
 
 const GridList100 = () => {
   const [fonts, setFonts] = useState([]);
   const [selectedFont, setSelectedFont] = useState("");
 
-  // fetch fonts
+  // Fetch fonts
   useEffect(() => {
     const loadFonts = async () => {
-      const fontList = await fetchFonts(300);
+      const fontList = await fetchFonts(100);
       setFonts(fontList);
     };
 
     loadFonts();
   }, []);
+
+  // Use the custom hook for font sizes
+  const { fontSizes, measureRef } = useFontSizes(fonts, 25);
+
   return (
     <div className="menu-container">
+      <FontMeasure measureRef={measureRef} baseFontSize={18} />
       <div
-        className="grid gap-1 p-1"
-        style={{ gridTemplateColumns: "repeat(20, minmax(0, 1fr))" }}
+        className="grid gap-x-1 gap-y-1 p-1"
+        style={{ gridTemplateColumns: "repeat(10, minmax(0, 1fr))" }}
       >
         {fonts.map((font) => {
-          loadGoogleFont(font.family); // Load the font dynamically
-
+          loadGoogleFont(font.family); // Load font dynamically
           return (
             <button
               key={font.family}
               onClick={() => setSelectedFont(font.family)}
-              className={`border p-0 text-[10px] ${
+              className={`border border-gray-400 p-0 bg-gray-200 w-full h-[60px] flex items-center justify-center shadow-sm transition-all duration-200 ease-in-out ${
                 selectedFont === font.family
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200"
+                  ? "bg-blue-400 text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
               }`}
-              style={{ fontFamily: font.family }}
+              style={{
+                fontFamily: font.family,
+                fontSize: `${fontSizes[font.family] || 20}px`, // Apply calculated font size
+              }}
             >
-              {font.family}
+              {trimFont(font.family, 7)}
             </button>
           );
         })}
       </div>
-      <TextArea selectedFont={selectedFont}></TextArea>
+      <TextArea selectedFont={selectedFont} />
     </div>
   );
 };
