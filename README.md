@@ -12,7 +12,7 @@ This project provides an **interactive font selection system** with:
 ### 1 Clone the Repository
 ```bash
 git https://git.cs.usask.ca/wgv256/cmpt-481-project.git
-cd font-selection-app
+cd cmpt-481-project
 ```
 ### 2 Install Dependencies
 ```bash
@@ -62,13 +62,6 @@ Hover previews update the text area in real-time.
 - **Vu Anh Huy Bui** (wgv256)
 - **Carter Dansereau** (qwx762)
 - **Conner LeBlanc** (col397)
-
-## 🏁 Running the Experiment
-Navigate to:
-```bash
-http://localhost:3000/experiment
-```
-Follow the instructions for the selection task.
 
 ## License
 Open-source under the **MIT License**.
