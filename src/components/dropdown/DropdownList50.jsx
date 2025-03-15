@@ -7,6 +7,7 @@ import FontMeasure from "../utils/FontMeasure";
 const DropdownList50 = () => {
   const [fonts, setFonts] = useState([]);
   const [selectedFont, setSelectedFont] = useState("Select a font...");
+  const [hoverFont, setHoverFont] = useState(""); // Track hovered font
   const [isOpen, setIsOpen] = useState(false);
   const [recentFonts, setRecentFonts] = useState([]); // Separate list for recently used fonts
   const dropdownRef = useRef(null);
@@ -26,6 +27,7 @@ const DropdownList50 = () => {
   // Handle font selection
   const handleSelect = (font) => {
     setSelectedFont(font);
+    setHoverFont(""); // Reset hover state when selecting a font
     setIsOpen(false);
 
     // Update recent fonts without modifying original font list
@@ -82,6 +84,8 @@ const DropdownList50 = () => {
                     <div
                       key={`recent-${font}`}
                       onClick={() => handleSelect(font)}
+                      onMouseEnter={() => setHoverFont(font)} // Change font on hover
+                      onMouseLeave={() => setHoverFont("")} // Reset on leave
                       className="cursor-pointer px-3 py-2 bg-purple-400 text-white font-bold hover:bg-purple-500"
                       style={{ fontFamily: font }}
                     >
@@ -100,6 +104,8 @@ const DropdownList50 = () => {
                 <div
                   key={font.family}
                   onClick={() => handleSelect(font.family)}
+                  onMouseEnter={() => setHoverFont(font.family)} // Change font on hover
+                  onMouseLeave={() => setHoverFont("")} // Reset on leave
                   className={`cursor-pointer px-3 py-2 hover:bg-gray-200
                               ${
                                 selectedFont === font.family
@@ -116,7 +122,8 @@ const DropdownList50 = () => {
         )}
       </div>
 
-      <TextArea selectedFont={selectedFont} />
+      {/* Pass hoverFont if hovering, otherwise use selectedFont */}
+      <TextArea selectedFont={hoverFont || selectedFont} />
     </div>
   );
 };
