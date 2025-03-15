@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import TextArea from "../TextArea";
 import { fetchFonts, loadGoogleFont } from "../utils/FontLoading";
-import { useFontSizes, trimFont } from "../utils/FontProcessing";
+import { useFontSizes } from "../utils/FontProcessing";
 import FontMeasure from "../utils/FontMeasure";
 
-const GridList50 = () => {
+const DropdownList50 = () => {
   const [fonts, setFonts] = useState([]);
   const [selectedFont, setSelectedFont] = useState("");
 
@@ -23,7 +23,7 @@ const GridList50 = () => {
 
   return (
     <div className="menu-container">
-      <FontMeasure measureRef={measureRef} baseFontSize={18} />
+      <FontMeasure measureRef={measureRef} baseFontSize={25} />
       <div
         className="grid gap-x-1 gap-y-1 p-1"
         style={{ gridTemplateColumns: "repeat(10, minmax(0, 1fr))" }}
@@ -58,4 +58,4 @@ const GridList50 = () => {
   );
 };
 
-export default GridList50;
+export default DropdownList50;

@@ -23,7 +23,7 @@ const GridList500 = () => {
 
   return (
     <div className="menu-container">
-      <FontMeasure measureRef={measureRef} baseFontSize={18} />
+      <FontMeasure measureRef={measureRef} baseFontSize={15} />
       <div
         className="grid gap-x-1 gap-y-1 p-1"
         style={{ gridTemplateColumns: "repeat(25, minmax(0, 1fr))" }}
