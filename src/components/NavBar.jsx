@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
+  const location = useLocation();
+
   return (
     <nav className="bg-gray-800 p-4">
       <div className="container mx-auto flex justify-between items-center">
@@ -16,11 +18,15 @@ const Navbar = () => {
             { name: "Dropdown 100", path: "/dropdown-100" },
             { name: "Dropdown 300", path: "/dropdown-300" },
             { name: "Dropdown 500", path: "/dropdown-500" },
-          ].map((item, index) => (
+          ].map((item) => (
             <li key={item.path} className="border-l border-gray-500">
               <Link
                 to={item.path}
-                className="block px-6 py-3 text-gray-300 hover:text-white hover:bg-gray-700 rounded-md"
+                className={`block px-6 py-3 rounded-md ${
+                  location.pathname === item.path
+                    ? "bg-blue-500 text-white font-bold"
+                    : "text-gray-300 hover:text-white hover:bg-gray-700"
+                }`}
               >
                 {item.name}
               </Link>
