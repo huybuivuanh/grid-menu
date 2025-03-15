@@ -8,6 +8,8 @@ const GridList300 = () => {
   const [fonts, setFonts] = useState([]);
   const [selectedFont, setSelectedFont] = useState("");
   const [recentFonts, setRecentFonts] = useState([]); // Track 5 most recent fonts
+  const [hoverFont, setHoverFont] = useState(""); // Track hovered font
+  const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 }); // Track cursor position for popup
 
   // Fetch fonts
   useEffect(() => {
@@ -21,24 +23,27 @@ const GridList300 = () => {
   // Use the custom hook for font sizes
   const { fontSizes, measureRef } = useFontSizes(fonts, 19);
 
-  // Handle font selection and update recent fonts
+  // Handle font selection
   const handleSelectFont = (font) => {
     setSelectedFont(font);
+    setHoverFont(""); // Reset hover state when a font is selected
 
     // Update recent fonts list (keep only the last 5)
     setRecentFonts((prev) => {
-      const updatedRecent = [font, ...prev.filter((f) => f !== font)];
+      const updatedRecent = [font, ...prev.filter((f) => f !== font)]; // Remove duplicates
       return updatedRecent.slice(0, 5); // Keep only the last 5 fonts
     });
   };
 
   return (
-    <div className="menu-container">
+    <div className="menu-container relative">
       <FontMeasure measureRef={measureRef} baseFontSize={19} />
 
+      {/* Font Grid */}
       <div
         className="grid gap-x-1 gap-y-1 p-1"
         style={{ gridTemplateColumns: "repeat(15, minmax(0, 1fr))" }}
+        onMouseLeave={() => setHoverFont("")} // Reset font when leaving grid
       >
         {fonts.map((font) => {
           loadGoogleFont(font.family); // Load font dynamically
@@ -47,6 +52,13 @@ const GridList300 = () => {
             <button
               key={font.family}
               onClick={() => handleSelectFont(font.family)}
+              onMouseEnter={(e) => {
+                setHoverFont(font.family);
+                setHoverPosition({ x: e.clientX, y: e.clientY }); // Store cursor position
+              }}
+              onMouseMove={(e) =>
+                setHoverPosition({ x: e.clientX, y: e.clientY })
+              } // Update position
               className={`border border-gray-400 p-0 w-full h-7 flex items-center justify-center shadow-sm transition-all duration-200 ease-in-out
                 ${
                   selectedFont === font.family
@@ -66,7 +78,25 @@ const GridList300 = () => {
         })}
       </div>
 
-      <TextArea selectedFont={selectedFont} />
+      {/* Hover preview popup */}
+      {hoverFont && (
+        <div
+          className="absolute bg-white border border-gray-400 shadow-lg p-4 rounded-lg transition-opacity duration-200 ease-in-out"
+          style={{
+            top: Math.min(hoverPosition.y - 180, window.innerHeight - 100), // Keep it inside viewport
+            left: Math.min(hoverPosition.x - 0, window.innerWidth - 200), // Prevent overflow
+            fontFamily: hoverFont,
+            fontSize: "40px", // Larger preview
+            zIndex: 50,
+            pointerEvents: "none", // Prevents blocking interactions
+          }}
+        >
+          {hoverFont}
+        </div>
+      )}
+
+      {/* Pass hoverFont if hovering, otherwise use selectedFont */}
+      <TextArea selectedFont={hoverFont || selectedFont} />
     </div>
   );
 };
