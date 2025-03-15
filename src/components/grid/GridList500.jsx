@@ -7,6 +7,7 @@ import FontMeasure from "../utils/FontMeasure";
 const GridList500 = () => {
   const [fonts, setFonts] = useState([]);
   const [selectedFont, setSelectedFont] = useState("");
+  const [recentFonts, setRecentFonts] = useState([]); // Track 5 most recent fonts
 
   // Fetch fonts
   useEffect(() => {
@@ -14,16 +15,27 @@ const GridList500 = () => {
       const fontList = await fetchFonts(500);
       setFonts(fontList);
     };
-
     loadFonts();
   }, []);
 
   // Use the custom hook for font sizes
   const { fontSizes, measureRef } = useFontSizes(fonts, 15);
 
+  // Handle font selection and update recent fonts
+  const handleSelectFont = (font) => {
+    setSelectedFont(font);
+
+    // Update recent fonts list (keep only the last 5)
+    setRecentFonts((prev) => {
+      const updatedRecent = [font, ...prev.filter((f) => f !== font)];
+      return updatedRecent.slice(0, 5); // Keep only the last 5 fonts
+    });
+  };
+
   return (
     <div className="menu-container">
       <FontMeasure measureRef={measureRef} baseFontSize={15} />
+
       <div
         className="grid gap-x-1 gap-y-1 p-1"
         style={{ gridTemplateColumns: "repeat(25, minmax(0, 1fr))" }}
@@ -34,12 +46,15 @@ const GridList500 = () => {
           return (
             <button
               key={font.family}
-              onClick={() => setSelectedFont(font.family)}
-              className={`border border-gray-400 p-0 bg-gray-200 w-full h-7 flex items-center justify-center shadow-sm transition-all duration-200 ease-in-out ${
-                selectedFont === font.family
-                  ? "bg-blue-400 text-white"
-                  : "bg-gray-200 hover:bg-gray-300"
-              }`}
+              onClick={() => handleSelectFont(font.family)}
+              className={`border border-gray-400 p-0 w-full h-7 flex items-center justify-center shadow-sm transition-all duration-200 ease-in-out
+                ${
+                  selectedFont === font.family
+                    ? "bg-blue-400 text-white"
+                    : recentFonts.includes(font.family)
+                    ? "bg-purple-400 text-white"
+                    : "bg-gray-200 hover:bg-gray-300"
+                }`}
               style={{
                 fontFamily: font.family,
                 fontSize: `${fontSizes[font.family] || 20}px`, // Apply calculated font size
@@ -50,6 +65,7 @@ const GridList500 = () => {
           );
         })}
       </div>
+
       <TextArea selectedFont={selectedFont} />
     </div>
   );
