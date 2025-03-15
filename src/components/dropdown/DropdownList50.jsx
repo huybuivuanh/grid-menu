@@ -7,8 +7,9 @@ import FontMeasure from "../utils/FontMeasure";
 const DropdownList50 = () => {
   const [fonts, setFonts] = useState([]);
   const [selectedFont, setSelectedFont] = useState("Select a font...");
-  const [isOpen, setIsOpen] = useState(false); // Toggle dropdown
-  const dropdownRef = useRef(null); // Ref for detecting outside clicks
+  const [isOpen, setIsOpen] = useState(false);
+  const [recentFonts, setRecentFonts] = useState([]); // Separate list for recently used fonts
+  const dropdownRef = useRef(null);
 
   // Fetch fonts
   useEffect(() => {
@@ -25,7 +26,16 @@ const DropdownList50 = () => {
   // Handle font selection
   const handleSelect = (font) => {
     setSelectedFont(font);
-    setIsOpen(false); // Close dropdown after selection
+    setIsOpen(false);
+
+    // Update recent fonts without modifying original font list
+    setRecentFonts((prev) => {
+      const updatedRecent = [font, ...prev.filter((f) => f !== font)].slice(
+        0,
+        5
+      );
+      return updatedRecent;
+    });
   };
 
   // Close dropdown when clicking outside
@@ -36,13 +46,11 @@ const DropdownList50 = () => {
       }
     };
 
-    // Attach event listener when dropdown is open
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      // Cleanup event listener when dropdown closes
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
@@ -62,6 +70,30 @@ const DropdownList50 = () => {
 
         {isOpen && (
           <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-[550px] overflow-y-auto">
+            {/* Render recent fonts first (separate from original list) */}
+            {recentFonts.length > 0 && (
+              <>
+                <div className="px-3 py-1 text-gray-500 font-semibold">
+                  Recent Fonts
+                </div>
+                {recentFonts.map((font) => {
+                  loadGoogleFont(font);
+                  return (
+                    <div
+                      key={`recent-${font}`}
+                      onClick={() => handleSelect(font)}
+                      className="cursor-pointer px-3 py-2 bg-purple-400 text-white font-bold hover:bg-purple-500"
+                      style={{ fontFamily: font }}
+                    >
+                      {font}
+                    </div>
+                  );
+                })}
+                <hr className="my-1 border-gray-300" />
+              </>
+            )}
+
+            {/* Render the full font list (always the same order) */}
             {fonts.map((font) => {
               loadGoogleFont(font.family);
               return (
