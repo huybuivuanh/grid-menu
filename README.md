@@ -1,12 +1,75 @@
-# React + Vite
+# Font Selection & Grid Menu App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+This project provides an **interactive font selection system** with:
+- **Grid-Based Font Selection** for quick browsing.
+- **Dropdown-Based Font Selection** with recent tracking.
+- **Hover Previews** for real-time font visualization.
+- **Google Font API Integration** for dynamic rendering.
+- **Experiment Mode** to compare selection speed and accuracy.
 
-Currently, two official plugins are available:
+## Installation
+### 1 Clone the Repository
+```bash
+git https://git.cs.usask.ca/wgv256/cmpt-481-project.git
+cd font-selection-app
+```
+### 2 Install Dependencies
+```bash
+npm install
+```
+### 3 Start the Development Server
+```bash
+npm run dev
+```
+Runs at **http://localhost:3000**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tools & Technologies
+- **React.js** (Frontend UI)
+- **Vite** (Fast development server)
+- **Tailwind CSS** (Styling)
+- **React Router** (Navigation)
+- **Google Fonts API** (Dynamic font loading)
+- **Firebase (Optional)** (Data storage)
 
-## Expanding the ESLint configuration
+## Features
+### **Grid & Dropdown Font Selection**
+- Grid layout for easy browsing.
+- Dropdown with recent font tracking & pagination.
+Hover previews update the text area in real-time.
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### **Experiment Mode (Evaluation Methodology)**
+- Users select a **randomly assigned font**.
+- Measures **selection speed & error rate**.
+- Supports **50, 300, and 1000 fonts**.
+- Data can be logged for analysis.
+
+## Evaluation & Analysis
+- **Independent Variable:** Menu Type (Dropdown vs. Grid)
+- **Dependent Variables:** Selection Time, Error Rate
+- **Experiment Setup:**
+  - Participants select fonts under a time constraint.
+  - Errors & time taken are recorded.
+  - Data can be exported for statistical analysis.
+
+## Resources
+- [Google Fonts API](https://fonts.google.com/)
+- [React.js Docs](https://reactjs.org/docs/)
+- [Vite Docs](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/docs/)
+
+## Team Members
+- **Vu Anh Huy Bui** (wgv256)
+- **Carter Dansereau** (qwx762)
+- **Conner LeBlanc** (col397)
+
+## 🏁 Running the Experiment
+Navigate to:
+```bash
+http://localhost:3000/experiment
+```
+Follow the instructions for the selection task.
+
+## License
+Open-source under the **MIT License**.
+
