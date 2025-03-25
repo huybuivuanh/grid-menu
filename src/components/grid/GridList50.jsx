@@ -54,6 +54,8 @@ const DropdownList50 = () => {
             console.log("Total Incorrect: " + currTrial.getErrors());
             console.log("Percentage: " + (currTrial.getCorrect() / 1) * 100 + "%");
             inTrial = false;
+            document.getElementById("trialButton").hidden = false;
+            document.getElementById("targetID").textContent = "";
 
         } else {
             StartTrial();
@@ -73,6 +75,7 @@ const DropdownList50 = () => {
 
     const StartTrial = () => {
         inTrial = true;
+        document.getElementById("trialButton").hidden = true;
         trialNumber++; // increment the trial number
         targetFont = Math.round((Math.random() * 50)); // get a random value from 0 to 49 (50 values)
         // set the text field to the current target font
@@ -148,7 +151,7 @@ const DropdownList50 = () => {
 
       {/* Pass hoverFont if hovering, otherwise use selectedFont */}
       <TextArea selectedFont={hoverFont || selectedFont} />
-      <button onClick={() => StartTrial()}>Start Evaluation</button>
+      <button id="trialButton" onClick={() => StartTrial()}>Start Evaluation</button>
       <label id="targetID"></label>
 
     </div>
