@@ -5,6 +5,7 @@ import { useFontSizes } from "../utils/FontProcessing";
 import FontMeasure from "../utils/FontMeasure";
 import Trial from "../evaluation/trial.js"
 
+// used for the evaluation process
 let currTrial;
 let setOfTrials;
 let targetFont;
@@ -172,7 +173,7 @@ const DropdownList50 = () => {
       )}
 
       {/* Pass hoverFont if hovering, otherwise use selectedFont */}
-      <div>
+      <div style={{ display: "flex" }}>
       <TextArea selectedFont={hoverFont || selectedFont} />
       <button id="trialButton" onClick={() => StartTrial()}>Start Evaluation</button>
       <label id="targetID"></label>
