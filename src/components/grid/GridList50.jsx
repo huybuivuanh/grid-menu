@@ -3,6 +3,14 @@ import TextArea from "../TextArea";
 import { fetchFonts, loadGoogleFont } from "../utils/FontLoading";
 import { useFontSizes } from "../utils/FontProcessing";
 import FontMeasure from "../utils/FontMeasure";
+import Trial from "../evaluation/trial.js"
+
+function startTrial() {
+    let newTrial = new Trial("GridList50");
+    console.time("start");
+
+
+}
 
 const DropdownList50 = () => {
   const [fonts, setFonts] = useState([]);
@@ -99,8 +107,8 @@ const DropdownList50 = () => {
 
       {/* Pass hoverFont if hovering, otherwise use selectedFont */}
       <TextArea selectedFont={hoverFont || selectedFont} />
-      <button >Start Evaluation</button>
-      
+      <button onClick={startTrial}>Start Evaluation</button>
+
     </div>
   );
 };

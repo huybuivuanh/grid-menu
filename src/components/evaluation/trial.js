@@ -1,34 +1,25 @@
-class trial{
-    startTime;
-    endTime;
+class Trial{
+    totalTime;
     errors;
     correct;
     percent;
 
-    trial(name){
+    Trial(name){
         this.name = name;
-        this.startTime = 0;
-        this.endTime = 0;
+        this.totalTime = 0;
         this.errors = 0;
         this.correct = 0;
         this.percent = 0;
     }
 
-    setStartTime(startTime){
-        this.startTime = startTime;
+    setTotalTime(totalTime){
+        this.totalTime = totalTime;
     }
 
-    getStartTime(){
-        return this.startTime;
+    getTotalTime(){
+        return this.totalTime;
     }
 
-    setEndTime(endTime){
-        this.endTime = endTime;
-    }
-
-    getEndTime(){
-        return this.endTime;
-    }
 
     setErrors(errors){
         this.errors = errors;
