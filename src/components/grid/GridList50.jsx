@@ -99,6 +99,8 @@ const DropdownList50 = () => {
 
       {/* Pass hoverFont if hovering, otherwise use selectedFont */}
       <TextArea selectedFont={hoverFont || selectedFont} />
+      <button >Start Evaluation</button>
+      
     </div>
   );
 };
