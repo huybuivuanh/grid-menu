@@ -107,7 +107,7 @@ const Dropdownlist300 = () => {
     currTrial = new Trial(); // create a new trial
     console.time("trial time"); // start a timer for the completion time of a single trial
     currTrial.setTrialNum(trialNum); // increment the trial number for the current trial
-    targetFont = Math.round((Math.random() * 300)); // get a random value from 0 to 299 (300 values)
+    targetFont = Math.floor((Math.random() * 300)); // get a random value from 0 to 299 (300 values)
     // set the text field to the current target font
     document.getElementById("targetID").textContent = "Target Font: " + fonts[targetFont].family;
     currTrial.setTarget(targetFont); // set the target font index
