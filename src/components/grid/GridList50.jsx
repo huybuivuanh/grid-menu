@@ -5,12 +5,11 @@ import { useFontSizes } from "../utils/FontProcessing";
 import FontMeasure from "../utils/FontMeasure";
 import Trial from "../evaluation/trial.js"
 
-function startTrial() {
-    let newTrial = new Trial("GridList50");
-    console.time("start");
+let currTrial;
+let trialNumber = 0;
+let targetFont;
+let inTrial = false;
 
-
-}
 
 const DropdownList50 = () => {
   const [fonts, setFonts] = useState([]);
@@ -34,6 +33,34 @@ const DropdownList50 = () => {
   // Handle font selection
   const handleSelectFont = (font) => {
     setSelectedFont(font);
+
+    if (inTrial) {
+        // if the selected font is the target font
+        if (font === fonts[currTrial.getTarget()].family) {
+            // update the correct trial
+            currTrial.setCorrect(currTrial.getCorrect() + 1);
+            console.log("CORRECT INDETIFIED");
+        } else {
+            console.log("Error recorded");
+            currTrial.setErrors(currTrial.getErrors() + 1);
+        }
+
+
+        if (trialNumber === 1) {
+            console.log("Total Time: ");
+            // need to stop it here
+            console.timeEnd("completion time"); // stop the timer
+            console.log("Total Correct: " + currTrial.getCorrect());
+            console.log("Total Incorrect: " + currTrial.getErrors());
+            console.log("Percentage: " + (currTrial.getCorrect() / 1) * 100 + "%");
+            inTrial = false;
+
+        } else {
+            StartTrial();
+
+        }
+    }
+
     setHoverFont(""); // Reset hover state when a font is selected
 
     // Update the recent fonts list (keep only the last 5)
@@ -42,6 +69,20 @@ const DropdownList50 = () => {
       return updatedRecent.slice(0, 5); // Keep only the last 5 fonts
     });
   };
+
+
+    const StartTrial = () => {
+        inTrial = true;
+        trialNumber++; // increment the trial number
+        targetFont = Math.round((Math.random() * 50)); // get a random value from 0 to 49 (50 values)
+        // set the text field to the current target font
+        document.getElementById("targetID").textContent = "Target Font: " + fonts[targetFont].family;
+        currTrial = new Trial(); // create a new trial
+        console.time("completion time"); // start a timer for the completion time of the 10 trials
+        currTrial.setTarget(targetFont); // set the target font index
+        }
+
+
 
   return (
     <div className="menu-container relative">
@@ -107,10 +148,13 @@ const DropdownList50 = () => {
 
       {/* Pass hoverFont if hovering, otherwise use selectedFont */}
       <TextArea selectedFont={hoverFont || selectedFont} />
-      <button onClick={startTrial}>Start Evaluation</button>
+      <button onClick={() => StartTrial()}>Start Evaluation</button>
+      <label id="targetID"></label>
 
     </div>
+
   );
+
 };
 
 export default DropdownList50;
