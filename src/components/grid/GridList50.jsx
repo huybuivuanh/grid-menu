@@ -6,10 +6,10 @@ import FontMeasure from "../utils/FontMeasure";
 import Trial from "../evaluation/trial.js"
 
 let currTrial;
-let trialNumber = 0;
+let setOfTrials;
 let targetFont;
 let inTrial = false;
-
+let trialNum = 0;
 
 const DropdownList50 = () => {
   const [fonts, setFonts] = useState([]);
@@ -34,32 +34,50 @@ const DropdownList50 = () => {
   const handleSelectFont = (font) => {
     setSelectedFont(font);
 
+    // if currently in a trial
     if (inTrial) {
         // if the selected font is the target font
         if (font === fonts[currTrial.getTarget()].family) {
-            // update the correct trial
+            // update the correct trial for the current trial and the set of trials
             currTrial.setCorrect(currTrial.getCorrect() + 1);
-            console.log("CORRECT INDETIFIED");
+            setOfTrials.setCorrect(setOfTrials.getCorrect() + 1);
         } else {
-            console.log("Error recorded");
+            // update the errors for the current trial and set of trials
             currTrial.setErrors(currTrial.getErrors() + 1);
+            setOfTrials.setErrors(setOfTrials.getErrors() + 1);
         }
 
+        // if on the final trial
+        if (currTrial.trialNum === 10) {
+            // log the final trial
+            console.timeEnd("trial time"); // stop the timer the trial
+            console.log("Trial Number: " + currTrial.trialNum + ", Total Correct: " + currTrial.getCorrect() +
+                ", Total Incorrect: " + currTrial.getErrors() +
+                ", Correct Percentage: " + (currTrial.getCorrect() / 1) * 100 + "%" +
+                ", Error Percentage: " + (currTrial.getErrors() / 1) * 100 + "%"
+            );
 
-        if (trialNumber === 1) {
-            console.log("Total Time: ");
-            // need to stop it here
-            console.timeEnd("completion time"); // stop the timer
-            console.log("Total Correct: " + currTrial.getCorrect());
-            console.log("Total Incorrect: " + currTrial.getErrors());
-            console.log("Percentage: " + (currTrial.getCorrect() / 1) * 100 + "%");
-            inTrial = false;
+            // log the results of the set of trials
+            console.log("\n" + "Results after 10 trials: " + "\n");
+            console.timeEnd("completion time"); // stop the timer after all trials
+            console.log("Total Correct: " + setOfTrials.getCorrect() +
+                ", Total Incorrect: " + setOfTrials.getErrors() +
+                ", Percentage: " + (setOfTrials.getCorrect() / 10) * 100 + "%" +
+                ", Error Percentage: " + (setOfTrials.getErrors() / 10) * 100 + "%"
+            );
+            inTrial = false; // stop the trial
+            // show the button again and remove the target font
             document.getElementById("trialButton").hidden = false;
             document.getElementById("targetID").textContent = "";
 
         } else {
+            console.timeEnd("trial time"); // stop the timer the trial
+            console.log("Trial Number: " + currTrial.trialNum + ", Total Correct: " + currTrial.getCorrect() +
+                ", Total Incorrect: " + currTrial.getErrors() +
+                ", Percentage: " + (currTrial.getCorrect() / 1) * 100 + "%" +
+                ", Error Percentage: " + (currTrial.getErrors() / 1) * 100 + "%"
+            );
             StartTrial();
-
         }
     }
 
@@ -74,18 +92,22 @@ const DropdownList50 = () => {
 
 
     const StartTrial = () => {
-        inTrial = true;
-        document.getElementById("trialButton").hidden = true;
-        trialNumber++; // increment the trial number
+        // if not in a trial yet
+        if (!inTrial){
+            inTrial = true;
+            console.time("completion time"); // start a timer for the completion time of the 10 trials
+            document.getElementById("trialButton").hidden = true; // hide the button
+            setOfTrials = new Trial(); // create a trial to represent the 10 trials
+        }
+        trialNum++; // increment the trial number to prepare for the new trial
+        currTrial = new Trial(); // create a new trial
+        console.time("trial time"); // start a timer for the completion time of a single trial
+        currTrial.setTrialNum(trialNum); // increment the trial number for the current trial
         targetFont = Math.round((Math.random() * 50)); // get a random value from 0 to 49 (50 values)
         // set the text field to the current target font
         document.getElementById("targetID").textContent = "Target Font: " + fonts[targetFont].family;
-        currTrial = new Trial(); // create a new trial
-        console.time("completion time"); // start a timer for the completion time of the 10 trials
         currTrial.setTarget(targetFont); // set the target font index
         }
-
-
 
   return (
     <div className="menu-container relative">
@@ -150,9 +172,11 @@ const DropdownList50 = () => {
       )}
 
       {/* Pass hoverFont if hovering, otherwise use selectedFont */}
+      <div>
       <TextArea selectedFont={hoverFont || selectedFont} />
       <button id="trialButton" onClick={() => StartTrial()}>Start Evaluation</button>
       <label id="targetID"></label>
+      </div>
 
     </div>
 

@@ -1,18 +1,8 @@
 class Trial{
     target;
-    totalTime;
     errors = 0;
     correct = 0;
-    percent = 0;
-
-    Trial(name){
-        this.name = name;
-        this.target = 0;
-        this.totalTime = 0;
-        this.errors = 0;
-        this.correct = 0;
-        this.percent = 0;
-    }
+    trialNum = 0;
 
     setTarget(target){
         this.target = target;
@@ -21,15 +11,6 @@ class Trial{
     getTarget(){
         return this.target;
     }
-
-    setTotalTime(totalTime){
-        this.totalTime = totalTime;
-    }
-
-    getTotalTime(){
-        return this.totalTime;
-    }
-
 
     setErrors(errors){
         this.errors = errors;
@@ -47,12 +28,13 @@ class Trial{
         return this.correct;
     }
 
-    setPercent(percent){
-        this.percent = percent;
+
+    setTrialNum(num){
+        this.trialNum = num;
     }
 
-    getPercent(){
-        return this.percent;
+    getTrialNum(){
+        return this.trialNum;
     }
 }
 
