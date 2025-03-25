@@ -71,6 +71,7 @@ const Dropdownlist500 = () => {
         // show the button again and remove the target font
         document.getElementById("trialButton").hidden = false;
         document.getElementById("targetID").textContent = "";
+        trialNum = 0; // reset the trial number
 
       } else {
         console.timeEnd("trial time"); // stop the timer the trial
