@@ -197,7 +197,7 @@ const GridList300 = () => {
       )}
 
       {/* Pass hoverFont if hovering, otherwise use selectedFont */}
-      <div style={{ display: "flex" }}>
+      <div style={{ gap: "10px", display: "flex", justifyContent: "center" }}>
         <TextArea selectedFont={hoverFont || selectedFont} />
         <button id="trialButton" onClick={() => StartTrial()}>
           Start Evaluation
