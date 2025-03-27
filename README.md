@@ -11,7 +11,7 @@ This project provides an **interactive font selection system** with:
 ## Installation
 ### 1 Clone the Repository
 ```bash
-git https://git.cs.usask.ca/wgv256/cmpt-481-project.git
+git git@git.cs.usask.ca:wgv256/cmpt-481-project.git
 cd cmpt-481-project
 ```
 ### 2 Install Dependencies
@@ -41,7 +41,7 @@ Hover previews update the text area in real-time.
 ### **Experiment Mode (Evaluation Methodology)**
 - Users select a **randomly assigned font**.
 - Measures **selection speed & error rate**.
-- Supports **50, 300, and 1000 fonts**.
+- Supports **50, 100, 300, and 500 fonts**.
 - Data can be logged for analysis.
 
 ## Evaluation & Analysis
