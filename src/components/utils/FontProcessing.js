@@ -6,7 +6,9 @@ export const useFontSizes = (fonts, baseFontSize) => {
 
   // Function to measure font size dynamically
   const measureFontSize = (fontFamily) => {
-    if (!measureRef.current) return baseFontSize; // Default size
+    if (!measureRef.current) {
+      return baseFontSize; // Default size
+    }
 
     // Set measurement text font
     measureRef.current.style.fontFamily = fontFamily;
@@ -22,25 +24,30 @@ export const useFontSizes = (fonts, baseFontSize) => {
     // Compute scale factor
     const scaleWidth = arialWidth / fontWidth;
     const scaleHeight = arialHeight / fontHeight;
-
-    return baseFontSize * Math.min(scaleWidth, scaleHeight); // Adjust base font size accordingly
+    return baseFontSize * Math.min(scaleWidth, scaleHeight);
   };
 
   // Compute font sizes after fonts load
   useEffect(() => {
-    if (fonts.length === 0) return;
-    const sizes = {};
-    fonts.forEach((font) => {
-      sizes[font.family] = measureFontSize(font.family);
-    });
-    setFontSizes(sizes);
+    if (!measureRef.current || fonts.length === 0) return;
+
+    const timeout = setTimeout(() => {
+      const sizes = {};
+      fonts.forEach((font) => {
+        sizes[font.family] = measureFontSize(font.family);
+      });
+      setFontSizes(sizes);
+    }, 0);
+
+    return () => clearTimeout(timeout);
   }, [fonts]);
+
 
   return { fontSizes, measureRef };
 };
 
 // make fonts shorter
-// fonts are at most 5 letters long, if there's a space, cut it entirely
+// fonts are at most "length" letters long, if there's a space, cut it entirely
 export const trimFont = (fontFamily, length) => {
   const trimmed = fontFamily.slice(0, length);
   const spaceIndex = trimmed.indexOf(" ");

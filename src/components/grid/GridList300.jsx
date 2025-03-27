@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import TextArea from "../TextArea";
 import { fetchFonts, loadGoogleFont } from "../utils/FontLoading";
-import { useFontSizes, trimFont } from "../utils/FontProcessing";
-import FontMeasure from "../utils/FontMeasure";
-import Trial from "../evaluation/trial.js"
+import { trimFont } from "../utils/FontProcessing";
+import Trial from "../evaluation/trial.js";
 
 // used for the evaluation process
 let currTrial;
@@ -14,10 +13,15 @@ let trialNum = 0;
 
 const GridList300 = () => {
   const [fonts, setFonts] = useState([]);
+  const [fontSizes, setFontSizes] = useState({});
   const [selectedFont, setSelectedFont] = useState("");
   const [recentFonts, setRecentFonts] = useState([]); // Track 5 most recent fonts
   const [hoverFont, setHoverFont] = useState(""); // Track hovered font
   const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 }); // Track cursor position for popup
+
+  useEffect(() => {
+    setFontSizes(JSON.parse(localStorage.getItem("fontSizes300")));
+  }, []);
 
   // Fetch fonts
   useEffect(() => {
@@ -28,8 +32,9 @@ const GridList300 = () => {
     loadFonts();
   }, []);
 
-  // Use the custom hook for font sizes
-  const { fontSizes, measureRef } = useFontSizes(fonts, 19);
+  useEffect(() => {
+    fonts.forEach((font) => loadGoogleFont(font.family));
+  }, [fonts]);
 
   // Handle font selection
   const handleSelectFont = (font) => {
@@ -52,32 +57,56 @@ const GridList300 = () => {
       if (currTrial.trialNum === 10) {
         // log the final trial
         console.timeEnd("trial time"); // stop the timer the trial
-        console.log("Trial Number: " + currTrial.trialNum + ", Total Correct: " + currTrial.getCorrect() +
-            ", Total Incorrect: " + currTrial.getErrors() +
-            ", Correct Percentage: " + (currTrial.getCorrect() / 1) * 100 + "%" +
-            ", Error Percentage: " + (currTrial.getErrors() / 1) * 100 + "%"
+        console.log(
+          "Trial Number: " +
+            currTrial.trialNum +
+            ", Total Correct: " +
+            currTrial.getCorrect() +
+            ", Total Incorrect: " +
+            currTrial.getErrors() +
+            ", Correct Percentage: " +
+            (currTrial.getCorrect() / 1) * 100 +
+            "%" +
+            ", Error Percentage: " +
+            (currTrial.getErrors() / 1) * 100 +
+            "%"
         );
 
         // log the results of the set of trials
         console.log("\n" + "Results after 10 trials: " + "\n");
         console.timeEnd("completion time"); // stop the timer after all trials
-        console.log("Total Correct: " + setOfTrials.getCorrect() +
-            ", Total Incorrect: " + setOfTrials.getErrors() +
-            ", Percentage: " + (setOfTrials.getCorrect() / 10) * 100 + "%" +
-            ", Error Percentage: " + (setOfTrials.getErrors() / 10) * 100 + "%"
+        console.log(
+          "Total Correct: " +
+            setOfTrials.getCorrect() +
+            ", Total Incorrect: " +
+            setOfTrials.getErrors() +
+            ", Percentage: " +
+            (setOfTrials.getCorrect() / 10) * 100 +
+            "%" +
+            ", Error Percentage: " +
+            (setOfTrials.getErrors() / 10) * 100 +
+            "%"
         );
         inTrial = false; // stop the trial
         // show the button again and remove the target font
         document.getElementById("trialButton").hidden = false;
         document.getElementById("targetID").textContent = "";
         trialNum = 0; // reset the trial number
-
       } else {
         console.timeEnd("trial time"); // stop the timer the trial
-        console.log("Trial Number: " + currTrial.trialNum + ", Total Correct: " + currTrial.getCorrect() +
-            ", Total Incorrect: " + currTrial.getErrors() +
-            ", Percentage: " + (currTrial.getCorrect() / 1) * 100 + "%" +
-            ", Error Percentage: " + (currTrial.getErrors() / 1) * 100 + "%"
+        console.log(
+          "Trial Number: " +
+            currTrial.trialNum +
+            ", Total Correct: " +
+            currTrial.getCorrect() +
+            ", Total Incorrect: " +
+            currTrial.getErrors() +
+            ", Percentage: " +
+            (currTrial.getCorrect() / 1) * 100 +
+            "%" +
+            ", Error Percentage: " +
+            (currTrial.getErrors() / 1) * 100 +
+            "%"
         );
         StartTrial();
       }
@@ -94,7 +123,7 @@ const GridList300 = () => {
 
   const StartTrial = () => {
     // if not in a trial yet
-    if (!inTrial){
+    if (!inTrial) {
       inTrial = true;
       console.time("completion time"); // start a timer for the completion time of the 10 trials
       document.getElementById("trialButton").hidden = true; // hide the button
@@ -104,16 +133,15 @@ const GridList300 = () => {
     currTrial = new Trial(); // create a new trial
     console.time("trial time"); // start a timer for the completion time of a single trial
     currTrial.setTrialNum(trialNum); // increment the trial number for the current trial
-    targetFont = Math.floor((Math.random() * 300)); // get a random value from 0 to 299 (300 values)
+    targetFont = Math.floor(Math.random() * 300); // get a random value from 0 to 299 (300 values)
     // set the text field to the current target font
-    document.getElementById("targetID").textContent = "Target Font: " + fonts[targetFont].family;
+    document.getElementById("targetID").textContent =
+      "Target Font: " + fonts[targetFont].family;
     currTrial.setTarget(targetFont); // set the target font index
-  }
+  };
 
   return (
     <div className="menu-container relative">
-      <FontMeasure measureRef={measureRef} baseFontSize={19} />
-
       {/* Font Grid */}
       <div
         className="grid gap-x-1 gap-y-1 p-1"
@@ -121,8 +149,6 @@ const GridList300 = () => {
         onMouseLeave={() => setHoverFont("")} // Reset font when leaving grid
       >
         {fonts.map((font) => {
-          loadGoogleFont(font.family); // Load font dynamically
-
           return (
             <button
               key={font.family}
@@ -173,7 +199,9 @@ const GridList300 = () => {
       {/* Pass hoverFont if hovering, otherwise use selectedFont */}
       <div style={{ display: "flex" }}>
         <TextArea selectedFont={hoverFont || selectedFont} />
-        <button id="trialButton" onClick={() => StartTrial()}>Start Evaluation</button>
+        <button id="trialButton" onClick={() => StartTrial()}>
+          Start Evaluation
+        </button>
         <label id="targetID"></label>
       </div>
     </div>

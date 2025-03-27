@@ -5,8 +5,8 @@ const TextArea = ({ selectedFont }) => {
   return (
     <div className="container mx-5 px-10">
       <textarea
-        className="w-full h-10 p-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-        style={{ fontFamily: selectedFont }}
+        className="w-100 h-12 p-1 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+        style={{ fontFamily: selectedFont, fontSize: "25px" }}
         placeholder="Type something here"
         value={text}
         onChange={(e) => setText(e.target.value)}

@@ -1,6 +1,61 @@
+import { useState, useEffect } from "react";
+import { fetchFonts, loadGoogleFont } from "./utils/FontLoading";
+import FontMeasure from "./utils/FontMeasure";
+import { useFontSizes } from "./utils/FontProcessing";
+
 const HomePageDescription = () => {
+  const [fonts, setFonts] = useState([]);
+
+  // Fetch fonts
+  useEffect(() => {
+    const loadFonts = async () => {
+      const fontList = await fetchFonts(500);
+      setFonts(fontList);
+    };
+    loadFonts();
+  }, []);
+  useEffect(() => {
+    fonts.forEach((font) => loadGoogleFont(font.family));
+  }, [fonts]);
+
+  const { fontSizes: fontSizes50, measureRef: measureRef50 } = useFontSizes(
+    fonts.slice(0, 51),
+    25
+  );
+  const { fontSizes: fontSizes100, measureRef: measureRef100 } = useFontSizes(
+    fonts.slice(0, 101),
+    25
+  );
+  const { fontSizes: fontSizes300, measureRef: measureRef300 } = useFontSizes(
+    fonts.slice(0, 301),
+    19
+  );
+  const { fontSizes: fontSizes500, measureRef: measureRef500 } = useFontSizes(
+    fonts.slice(0, 501),
+    15
+  );
+
+  useEffect(() => {
+    const fontSizeMap = {
+      fonts,
+      fontSizes50,
+      fontSizes100,
+      fontSizes300,
+      fontSizes500,
+    };
+
+    Object.entries(fontSizeMap).forEach(([key, value]) => {
+      if (value && Object.keys(value).length > 0) {
+        localStorage.setItem(key, JSON.stringify(value));
+      }
+    });
+  }, [fontSizes50, fontSizes100, fontSizes300, fontSizes500]);
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
+      <FontMeasure measureRef={measureRef50} baseFontSize={25} />
+      <FontMeasure measureRef={measureRef100} baseFontSize={25} />
+      <FontMeasure measureRef={measureRef300} baseFontSize={19} />
+      <FontMeasure measureRef={measureRef500} baseFontSize={15} />
       {/* Header Section */}
       <header className="bg-blue-600 w-full py-8 text-center text-white">
         <h1 className="text-5xl font-bold">Font Selection & Grid Menu App</h1>
@@ -18,17 +73,16 @@ const HomePageDescription = () => {
           </h2>
           <p className="text-lg text-gray-700 leading-relaxed">
             This application provides an innovative approach to font selection
-            by offering both grid-based menus and dropdown-based menus
-            with enhanced user interaction. Instead of scrolling through long
-            lists, users can quickly preview, compare, and select fonts in an
-            intuitive layout.
+            by offering both grid-based menus and dropdown-based menus with
+            enhanced user interaction. Instead of scrolling through long lists,
+            users can quickly preview, compare, and select fonts in an intuitive
+            layout.
           </p>
           <p className="text-lg text-gray-700 mt-4">
             The project supports multiple font selection methods, including
-            recent font tracking, hover previews, pagination, and a text
-            area that updates dynamically based on user interaction. This
-            ensures a seamless and efficient way to explore a large number of
-            fonts.
+            recent font tracking, hover previews, pagination, and a text area
+            that updates dynamically based on user interaction. This ensures a
+            seamless and efficient way to explore a large number of fonts.
           </p>
         </section>
 

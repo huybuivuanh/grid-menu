@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import TextArea from "../TextArea";
 import { fetchFonts, loadGoogleFont } from "../utils/FontLoading";
-import { useFontSizes } from "../utils/FontProcessing";
-import FontMeasure from "../utils/FontMeasure";
-import Trial from "../evaluation/trial.js"
+import Trial from "../evaluation/trial.js";
 
 // used for the evaluation process
 let currTrial;
@@ -14,10 +12,15 @@ let trialNum = 0;
 
 const DropdownList50 = () => {
   const [fonts, setFonts] = useState([]);
+  const [fontSizes, setFontSizes] = useState({});
   const [selectedFont, setSelectedFont] = useState("");
   const [recentFonts, setRecentFonts] = useState([]); // Track recent fonts
   const [hoverFont, setHoverFont] = useState(""); // Track hovered font
   const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 }); // Track mouse position for popup
+
+  useEffect(() => {
+    setFontSizes(JSON.parse(localStorage.getItem("fontSizes50")));
+  }, []);
 
   // Fetch fonts
   useEffect(() => {
@@ -28,8 +31,9 @@ const DropdownList50 = () => {
     loadFonts();
   }, []);
 
-  // Use the custom hook for font sizes
-  const { fontSizes, measureRef } = useFontSizes(fonts, 25);
+  useEffect(() => {
+    fonts.forEach((font) => loadGoogleFont(font.family));
+  }, [fonts]);
 
   // Handle font selection
   const handleSelectFont = (font) => {
@@ -37,50 +41,74 @@ const DropdownList50 = () => {
 
     // if currently in a trial
     if (inTrial) {
-        // if the selected font is the target font
-        if (font === fonts[currTrial.getTarget()].family) {
-            // update the correct trial for the current trial and the set of trials
-            currTrial.setCorrect(currTrial.getCorrect() + 1);
-            setOfTrials.setCorrect(setOfTrials.getCorrect() + 1);
-        } else {
-            // update the errors for the current trial and set of trials
-            currTrial.setErrors(currTrial.getErrors() + 1);
-            setOfTrials.setErrors(setOfTrials.getErrors() + 1);
-        }
+      // if the selected font is the target font
+      if (font === fonts[currTrial.getTarget()].family) {
+        // update the correct trial for the current trial and the set of trials
+        currTrial.setCorrect(currTrial.getCorrect() + 1);
+        setOfTrials.setCorrect(setOfTrials.getCorrect() + 1);
+      } else {
+        // update the errors for the current trial and set of trials
+        currTrial.setErrors(currTrial.getErrors() + 1);
+        setOfTrials.setErrors(setOfTrials.getErrors() + 1);
+      }
 
-        // if on the final trial
-        if (currTrial.trialNum === 10) {
-            // log the final trial
-            console.timeEnd("trial time"); // stop the timer the trial
-            console.log("Trial Number: " + currTrial.trialNum + ", Total Correct: " + currTrial.getCorrect() +
-                ", Total Incorrect: " + currTrial.getErrors() +
-                ", Correct Percentage: " + (currTrial.getCorrect() / 1) * 100 + "%" +
-                ", Error Percentage: " + (currTrial.getErrors() / 1) * 100 + "%"
-            );
+      // if on the final trial
+      if (currTrial.trialNum === 10) {
+        // log the final trial
+        console.timeEnd("trial time"); // stop the timer the trial
+        console.log(
+          "Trial Number: " +
+            currTrial.trialNum +
+            ", Total Correct: " +
+            currTrial.getCorrect() +
+            ", Total Incorrect: " +
+            currTrial.getErrors() +
+            ", Correct Percentage: " +
+            (currTrial.getCorrect() / 1) * 100 +
+            "%" +
+            ", Error Percentage: " +
+            (currTrial.getErrors() / 1) * 100 +
+            "%"
+        );
 
-            // log the results of the set of trials
-            console.log("\n" + "Results after 10 trials: " + "\n");
-            console.timeEnd("completion time"); // stop the timer after all trials
-            console.log("Total Correct: " + setOfTrials.getCorrect() +
-                ", Total Incorrect: " + setOfTrials.getErrors() +
-                ", Percentage: " + (setOfTrials.getCorrect() / 10) * 100 + "%" +
-                ", Error Percentage: " + (setOfTrials.getErrors() / 10) * 100 + "%"
-            );
-            inTrial = false; // stop the trial
-            // show the button again and remove the target font
-            document.getElementById("trialButton").hidden = false;
-            document.getElementById("targetID").textContent = "";
-            trialNum = 0; // reset the trial number
-
-        } else {
-            console.timeEnd("trial time"); // stop the timer the trial
-            console.log("Trial Number: " + currTrial.trialNum + ", Total Correct: " + currTrial.getCorrect() +
-                ", Total Incorrect: " + currTrial.getErrors() +
-                ", Percentage: " + (currTrial.getCorrect() / 1) * 100 + "%" +
-                ", Error Percentage: " + (currTrial.getErrors() / 1) * 100 + "%"
-            );
-            StartTrial();
-        }
+        // log the results of the set of trials
+        console.log("\n" + "Results after 10 trials: " + "\n");
+        console.timeEnd("completion time"); // stop the timer after all trials
+        console.log(
+          "Total Correct: " +
+            setOfTrials.getCorrect() +
+            ", Total Incorrect: " +
+            setOfTrials.getErrors() +
+            ", Percentage: " +
+            (setOfTrials.getCorrect() / 10) * 100 +
+            "%" +
+            ", Error Percentage: " +
+            (setOfTrials.getErrors() / 10) * 100 +
+            "%"
+        );
+        inTrial = false; // stop the trial
+        // show the button again and remove the target font
+        document.getElementById("trialButton").hidden = false;
+        document.getElementById("targetID").textContent = "";
+        trialNum = 0; // reset the trial number
+      } else {
+        console.timeEnd("trial time"); // stop the timer the trial
+        console.log(
+          "Trial Number: " +
+            currTrial.trialNum +
+            ", Total Correct: " +
+            currTrial.getCorrect() +
+            ", Total Incorrect: " +
+            currTrial.getErrors() +
+            ", Percentage: " +
+            (currTrial.getCorrect() / 1) * 100 +
+            "%" +
+            ", Error Percentage: " +
+            (currTrial.getErrors() / 1) * 100 +
+            "%"
+        );
+        StartTrial();
+      }
     }
 
     setHoverFont(""); // Reset hover state when a font is selected
@@ -92,50 +120,45 @@ const DropdownList50 = () => {
     });
   };
 
-
-    const StartTrial = () => {
-        // if not in a trial yet
-        if (!inTrial){
-            inTrial = true;
-            console.time("completion time"); // start a timer for the completion time of the 10 trials
-            document.getElementById("trialButton").hidden = true; // hide the button
-            setOfTrials = new Trial(); // create a trial to represent the 10 trials
-        }
-        trialNum++; // increment the trial number to prepare for the new trial
-        currTrial = new Trial(); // create a new trial
-        console.time("trial time"); // start a timer for the completion time of a single trial
-        currTrial.setTrialNum(trialNum); // increment the trial number for the current trial
-        targetFont = Math.floor((Math.random() * 50)); // get a random value from 0 to 49 (50 values)
-        // set the text field to the current target font
-        document.getElementById("targetID").textContent = "Target Font: " + fonts[targetFont].family;
-        currTrial.setTarget(targetFont); // set the target font index
-        }
+  const StartTrial = () => {
+    // if not in a trial yet
+    if (!inTrial) {
+      inTrial = true;
+      console.time("completion time"); // start a timer for the completion time of the 10 trials
+      document.getElementById("trialButton").hidden = true; // hide the button
+      setOfTrials = new Trial(); // create a trial to represent the 10 trials
+    }
+    trialNum++; // increment the trial number to prepare for the new trial
+    currTrial = new Trial(); // create a new trial
+    console.time("trial time"); // start a timer for the completion time of a single trial
+    currTrial.setTrialNum(trialNum); // increment the trial number for the current trial
+    targetFont = Math.floor(Math.random() * 50); // get a random value from 0 to 49 (50 values)
+    // set the text field to the current target font
+    document.getElementById("targetID").textContent =
+      "Target Font: " + fonts[targetFont].family;
+    currTrial.setTarget(targetFont); // set the target font index
+  };
 
   return (
     <div className="menu-container relative">
-      <FontMeasure measureRef={measureRef} baseFontSize={25} />
-
       {/* Font grid */}
       <div
         className="grid gap-x-1 gap-y-1 p-1"
         style={{ gridTemplateColumns: "repeat(10, minmax(0, 1fr))" }}
         onMouseLeave={() => setHoverFont("")} // Reset font when leaving grid
       >
-        {fonts.map((font) => {
-          loadGoogleFont(font.family); // Load font dynamically
-
-          return (
-            <button
-              key={font.family}
-              onClick={() => handleSelectFont(font.family)}
-              onMouseEnter={(e) => {
-                setHoverFont(font.family);
-                setHoverPosition({ x: e.clientX, y: e.clientY }); // Store cursor position
-              }}
-              onMouseMove={(e) =>
-                setHoverPosition({ x: e.clientX, y: e.clientY })
-              } // Update position
-              className={`border border-gray-400 h-[100px] w-full 
+        {fonts.map((font) => (
+          <button
+            key={font.family}
+            onClick={() => handleSelectFont(font.family)}
+            onMouseEnter={(e) => {
+              setHoverFont(font.family);
+              setHoverPosition({ x: e.clientX, y: e.clientY }); // Store cursor position
+            }}
+            onMouseMove={(e) =>
+              setHoverPosition({ x: e.clientX, y: e.clientY })
+            } // Update position
+            className={`border border-gray-400 h-[100px] w-full 
                flex items-center justify-center shadow-sm
                transition-all duration-200 ease-in-out 
                ${
@@ -145,15 +168,14 @@ const DropdownList50 = () => {
                    ? "bg-purple-400 text-white" // Purple for recent fonts
                    : "bg-gray-200 hover:bg-gray-300"
                }`}
-              style={{
-                fontFamily: font.family,
-                fontSize: `${fontSizes[font.family] || 20}px`,
-              }}
-            >
-              {font.family}
-            </button>
-          );
-        })}
+            style={{
+              fontFamily: font.family,
+              fontSize: `${fontSizes[font.family] || 20}px`,
+            }}
+          >
+            {font.family}
+          </button>
+        ))}
       </div>
 
       {/* Hover preview popup */}
@@ -175,15 +197,14 @@ const DropdownList50 = () => {
 
       {/* Pass hoverFont if hovering, otherwise use selectedFont */}
       <div style={{ display: "flex" }}>
-      <TextArea selectedFont={hoverFont || selectedFont} />
-      <button id="trialButton" onClick={() => StartTrial()}>Start Evaluation</button>
-      <label id="targetID"></label>
+        <TextArea selectedFont={hoverFont || selectedFont} />
+        <button id="trialButton" onClick={() => StartTrial()}>
+          Start Evaluation
+        </button>
+        <label id="targetID"></label>
       </div>
-
     </div>
-
   );
-
 };
 
 export default DropdownList50;
