@@ -104,22 +104,30 @@ const GridList500 = () => {
       {/* Bottom UI */}
       <div
         style={{
-          gap: "10px",
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "space-between", // Push children to sides
           alignItems: "center",
-          padding: "10px",
+          width: "100%", // Ensure full width to allow spacing
+          padding: "0 20px", // Optional horizontal padding
+          boxSizing: "border-box", // So padding doesn't affect layout
         }}
       >
         <TextArea selectedFont={hoverFont || selectedFont} />
-        {showTrialButton && (
-          <button id="trialButton" onClick={startTrial}>
-            Start Evaluation
-          </button>
-        )}
-        <p style={{ fontSize: "25px", fontFamily: targetFontFamily }}>
-          {targetText}
-        </p>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+          }}
+        >
+          {showTrialButton && (
+            <button onClick={startTrial}>Start Evaluation</button>
+          )}
+          <p style={{ fontSize: "25px", fontFamily: targetFontFamily }}>
+            {targetText}
+          </p>
+        </div>
       </div>
     </div>
   );
