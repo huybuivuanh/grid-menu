@@ -15,6 +15,8 @@ export const useEvaluation = (fonts) => {
     trialStartTime: null,
   });
 
+  const timeoutRef = useRef(null);
+
   const startTrial = () => {
     if (!fonts.length) return;
 
@@ -38,10 +40,18 @@ export const useEvaluation = (fonts) => {
     trialRef.current.trialNum += 1;
     trialRef.current.trialStartTime = Date.now();
 
-    setTargetText("Target Font: " + fonts[target].family);
+    setTargetText(`Trail ${trialNum + 1}:   ${fonts[target].family}`);
     setTargetFontFamily(fonts[target].family);
+
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      evaluateSelection(null);
+    }, 10000);
   };
+
   const evaluateSelection = (font) => {
+    clearTimeout(timeoutRef.current); // Clear the 10s timeout
+
     const {
       currTrial,
       setOfTrials,
@@ -50,10 +60,11 @@ export const useEvaluation = (fonts) => {
       trialStartTime,
       startTime,
     } = trialRef.current;
+
     if (!inTrial || !currTrial || !fonts.length) return;
 
     const targetFont = fonts[currTrial.getTarget()].family;
-    const isCorrect = font === targetFont;
+    const isCorrect = font === targetFont && font !== null;
 
     if (isCorrect) {
       currTrial.setCorrect(currTrial.getCorrect() + 1);
@@ -71,9 +82,9 @@ export const useEvaluation = (fonts) => {
     const setErrorPct = ((setErrors / setTotal) * 100).toFixed(0);
 
     console.log(
-      `Trial: ${trialNum}, Is Correct: ${isCorrect}, Trial Result: ${setCorrect}/${setTotal}, Percentage: ${setCorrectPct}%, Error Percentage: ${setErrorPct}%, Trial time: ${
-        trialTime.toFixed(2) / 1000
-      }s`
+      `Trial: ${trialNum}, Is Correct: ${isCorrect}, Trial Result: ${setCorrect}/${setTotal}, Percentage: ${setCorrectPct}%, Error Percentage: ${setErrorPct}%, Trial time: ${(
+        trialTime / 1000
+      ).toFixed(2)}s`
     );
     console.log("");
 
@@ -86,7 +97,7 @@ export const useEvaluation = (fonts) => {
       const setErrorPct = ((setErrors / setTotal) * 100).toFixed(0);
 
       console.log("Final Result:");
-      console.log(`Completion time: ${totalTime.toFixed(2) / 1000}s`);
+      console.log(`Completion time: ${(totalTime / 1000).toFixed(2)}s`);
       console.log(
         `Total Correct: ${setCorrect}, Total Incorrect: ${setErrors}, Percentage: ${setCorrectPct}%, Error Percentage: ${setErrorPct}%`
       );
@@ -99,6 +110,7 @@ export const useEvaluation = (fonts) => {
       startTrial(); // Next trial
     }
   };
+
 
   return {
     targetFontFamily,
