@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/NavBar";
-import Home from "./pages/HomePage";
+import Home from "./pages/Homepage";
 import Grid50 from "./pages/Grid50";
 import Grid100 from "./pages/Grid100";
 import Grid300 from "./pages/Grid300";
