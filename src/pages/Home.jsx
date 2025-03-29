@@ -1,9 +1,9 @@
-import HomepageDescription from "../components/HomepageDescription";
+import HomeDescription from "../components/HomeDescription";
 
 const Home = () => {
   return (
     <div>
-      <HomepageDescription></HomepageDescription>
+      <HomeDescription></HomeDescription>
     </div>
   );
 };
