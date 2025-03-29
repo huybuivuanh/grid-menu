@@ -23,7 +23,7 @@ jobs:
       - name: Debug API key
         run: echo "VITE_API_KEY is $VITE_API_KEY"
         env:
-          VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
+          VITE_API_KEY: ${{ secrets.VITE_FONT_API }}
         
       - name: Build
         run: npm run build
