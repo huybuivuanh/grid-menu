@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import Trial from "./Trial.js";
+import Trial from "./Trial";
 
 export const useEvaluation = (fonts) => {
   const [targetText, setTargetText] = useState("");
