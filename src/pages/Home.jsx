@@ -1,6 +1,6 @@
 import HomepageDescription from "../components/HomepageDescription";
 
-const HomePage = () => {
+const Home = () => {
   return (
     <div>
       <HomepageDescription></HomepageDescription>
@@ -8,4 +8,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Home;
