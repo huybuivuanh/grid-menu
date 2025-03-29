@@ -3,7 +3,7 @@ import { fetchFonts, loadGoogleFont } from "./utils/FontLoading";
 import FontMeasure from "./utils/FontMeasure";
 import { useFontSizes } from "./utils/FontProcessing";
 
-const HomePageDescription = () => {
+const HomepageDescription = () => {
   const [fonts, setFonts] = useState([]);
 
   // Fetch fonts
@@ -139,4 +139,4 @@ const HomePageDescription = () => {
   );
 };
 
-export default HomePageDescription;
+export default HomepageDescription;

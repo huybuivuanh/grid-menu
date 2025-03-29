@@ -1,11 +1,11 @@
-import HomePageDescription from "../components/HomepageDescription";
+import HomepageDescription from "../components/HomepageDescription";
 
-const HomePage = () => {
+const Homepage = () => {
   return (
     <div>
-      <HomePageDescription></HomePageDescription>
+      <HomepageDescription></HomepageDescription>
     </div>
   );
 };
 
-export default HomePage;
+export default Homepage;
