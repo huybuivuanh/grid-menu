@@ -2,6 +2,7 @@
 // numOfFonts: number of fonts you want to import
 export const fetchFonts = async (numOfFonts) => {
   try {
+    console.log("Font API key:", import.meta.env.VITE_API_KEY);
     const response = await fetch(
       `https://www.googleapis.com/webfonts/v1/webfonts?key=${
         import.meta.env.VITE_API_KEY
