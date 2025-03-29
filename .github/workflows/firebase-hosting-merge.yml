@@ -19,11 +19,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Debug API key
-        run: echo "VITE_API_KEY is $VITE_API_KEY"
-        env:
-          VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
         
       - name: Build
         run: npm run build
