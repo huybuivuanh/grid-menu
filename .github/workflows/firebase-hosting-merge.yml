@@ -19,16 +19,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Debug API key
-        run: echo "VITE_API_KEY is $VITE_API_KEY"
-        env:
-          VITE_API_KEY: ${{ secrets.VITE_FONT_API }}
         
       - name: Build
         run: npm run build
         env:
-          VITE_API_KEY: ${{ secrets.VITE_FONT_API }}
+          VITE_FONT_API: ${{ secrets.VITE_FONT_API }}
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
