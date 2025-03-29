@@ -3,7 +3,9 @@
 export const fetchFonts = async (numOfFonts) => {
   try {
     const response = await fetch(
-      `https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyC1_xKBz4moDq2xA1J4wd-I_vNXXv7GrRE`
+      `https://www.googleapis.com/webfonts/v1/webfonts?key=${
+        import.meta.env.VITE_FONT_API
+      }`
     );
     const data = await response.json();
     return data.items.slice(0, numOfFonts);
