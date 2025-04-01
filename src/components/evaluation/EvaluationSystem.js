@@ -40,13 +40,13 @@ export const useEvaluation = (fonts) => {
     trialRef.current.trialNum += 1;
     trialRef.current.trialStartTime = Date.now();
 
-    setTargetText(`Trail ${trialNum + 1}:   ${fonts[target].family}`);
+    setTargetText(`Trial ${trialNum + 1}:   ${fonts[target].family}`);
     setTargetFontFamily(fonts[target].family);
 
     clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
       evaluateSelection(null);
-    }, 10000);
+    }, 20000);
   };
 
   const evaluateSelection = (font) => {
